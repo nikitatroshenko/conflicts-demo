@@ -1,4 +1,6 @@
 import logging
+from functools import reduce
+import operator
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -13,19 +15,13 @@ def scalar_product(values: List[int], scalar: int) -> List[int]:
 
 
 def new_replicated_vector(size: int, init_value: int) -> List[int]:
-    result = []
     logger.debug("new_replicated_vector: size=%s, init_value=%s", size, init_value)
-    for _ in range(size):
-        result.append(init_value)
-    return result
+    return [init_value] * size
 
 
 def new_vector(*values: str) -> List[int]:
-    result = []
     logger.debug("new_vector: %s", values)
-    for value in values:
-        result.append(int(value))
-    return result
+    return [int(v) for v in values]
 
 
 def dot_product(lhs: List[int], rhs: List[int]) -> int:
@@ -37,33 +33,29 @@ def dot_product(lhs: List[int], rhs: List[int]) -> int:
     return result
 
 
-def get_scalar(argv: List[str]) -> int:
-    i = argv.index("--scalar")
-    scalar = argv[i + 1]
+def get_long_int_arg(argv: List[str], argname: str) -> int:
+    i = argv.index(argname)
+    value = argv[i + 1]
     argv.pop(i + 1)
     argv.pop(i)
-    return int(scalar)
+    return int(value)
+
+
+def get_scalar(argv: List[str]) -> int:
+    return get_long_int_arg("--scalar")
 
 
 def get_size(argv: List[str]) -> int:
-    i = argv.index("--size")
-    scalar = argv[i + 1]
-    argv.pop(i + 1)
-    argv.pop(i)
-    return int(scalar)
+    return get_long_int_arg("--size")
 
 
 def get_init_value(argv: List[str]) -> int:
-    i = argv.index("--init-value")
-    scalar = argv[i + 1]
-    argv.pop(i + 1)
-    argv.pop(i)
-    return int(scalar)
+    return get_long_int_arg("--init-value")
 
 
 if __name__ == "__main__":
     import sys
-    
+
     logging.basicConfig(level="DEBUG")
 
     _size = get_size(sys.argv)
