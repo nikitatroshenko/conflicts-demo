@@ -1,3 +1,5 @@
+from functools import reduce
+import operator
 from typing import List
 
 def scalar_product(values: List[int], scalar: int) -> List[int]:
@@ -8,50 +10,36 @@ def scalar_product(values: List[int], scalar: int) -> List[int]:
 
 
 def new_replicated_vector(size: int, init_value: int) -> List[int]:
-    result = []
-    for _ in range(size):
-        result.append(init_value)
-    return result
+    return [init_value] * size
 
 
 def new_vector(*values: str) -> List[int]:
-    result = []
-    for value in values:
-        result.append(int(value))
-    return result
+    return [int(v) for v in values]
 
 
 def dot_product(lhs: List[int], rhs: List[int]) -> int:
     assert len(lhs) == len(rhs)
-    result = 0
-    for i in range(len(lhs)):
-        for j in range(len(rhs)):
-            result += lhs[i] * rhs[j]
-    return result
+    return reduce(operator.add, [a * b for a, b in zip(lhs, rhs)])
+
+
+def get_long_int_arg(argv: List[str], argname: str) -> int:
+    i = argv.index(argname)
+    value = argv[i + 1]
+    argv.pop(i + 1)
+    argv.pop(i)
+    return int(value)
 
 
 def get_scalar(argv: List[str]) -> int:
-    i = argv.index("--scalar")
-    scalar = argv[i + 1]
-    argv.pop(i + 1)
-    argv.pop(i)
-    return int(scalar)
+    return get_long_int_arg("--scalar")
 
 
 def get_size(argv: List[str]) -> int:
-    i = argv.index("--size")
-    scalar = argv[i + 1]
-    argv.pop(i + 1)
-    argv.pop(i)
-    return int(scalar)
+    return get_long_int_arg("--size")
 
 
 def get_init_value(argv: List[str]) -> int:
-    i = argv.index("--init-value")
-    scalar = argv[i + 1]
-    argv.pop(i + 1)
-    argv.pop(i)
-    return int(scalar)
+    return get_long_int_arg("--init-value")
 
 
 if __name__ == "__main__":
