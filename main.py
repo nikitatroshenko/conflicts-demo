@@ -1,7 +1,12 @@
+import logging
 from typing import List
+
+logger = logging.getLogger(__name__)
+
 
 def scalar_product(values: List[int], scalar: int) -> List[int]:
     result = []
+    logger.debug("scalar_product: %s * %s", values, scalar)
     for value in values:
         result.append(value * scalar)
     return result
@@ -9,6 +14,7 @@ def scalar_product(values: List[int], scalar: int) -> List[int]:
 
 def new_replicated_vector(size: int, init_value: int) -> List[int]:
     result = []
+    logger.debug("new_replicated_vector: size=%s, init_value=%s", size, init_value)
     for _ in range(size):
         result.append(init_value)
     return result
@@ -16,17 +22,18 @@ def new_replicated_vector(size: int, init_value: int) -> List[int]:
 
 def new_vector(*values: str) -> List[int]:
     result = []
+    logger.debug("new_vector: %s", values)
     for value in values:
         result.append(int(value))
     return result
 
 
 def dot_product(lhs: List[int], rhs: List[int]) -> int:
+    logger.debug("dot_product: %s.%s", lhs, rhs)
     assert len(lhs) == len(rhs)
     result = 0
     for i in range(len(lhs)):
-        for j in range(len(rhs)):
-            result += lhs[i] * rhs[j]
+        result += lhs[i] * rhs[i]
     return result
 
 
@@ -56,6 +63,8 @@ def get_init_value(argv: List[str]) -> int:
 
 if __name__ == "__main__":
     import sys
+    
+    logging.basicConfig(level="DEBUG")
 
     _size = get_size(sys.argv)
     _init_value = get_init_value(sys.argv)
