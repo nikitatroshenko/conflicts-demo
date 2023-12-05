@@ -31,15 +31,15 @@ def get_long_int_arg(argv: List[str], argname: str) -> int:
 
 
 def get_scalar(argv: List[str]) -> int:
-    return get_long_int_arg("--scalar")
+    return get_long_int_arg(argv, "--scalar")
 
 
 def get_size(argv: List[str]) -> int:
-    return get_long_int_arg("--size")
+    return get_long_int_arg(argv, "--size")
 
 
 def get_init_value(argv: List[str]) -> int:
-    return get_long_int_arg("--init-value")
+    return get_long_int_arg(argv, "--init-value")
 
 
 if __name__ == "__main__":
